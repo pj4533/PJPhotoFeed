@@ -7,7 +7,7 @@
 //
 
 #import "PJPhotoVC.h"
-#import "LPFacebook.h"
+//#import "LPFacebook.h"
 
 @implementation PJPhotoVC
 @synthesize photoDescription;
@@ -149,30 +149,30 @@
     [externalActions showInView:self.view];
 }
 
-- (void) sharePhotoToFacebook {
-    for (UIView* subview in photoScrollView.subviews) {
-        if (subview.tag == 1) {
-            if (photoScrollView.contentOffset.x == subview.frame.origin.x) {
-                UIImageView* imgView = (UIImageView*) subview;
-                NSData* photoData = UIImagePNGRepresentation(imgView.image);
-                [[LPFacebook shared] sharePhotoWithData:photoData];
-            }
-        }
-    }                
-}
-
-- (void) facebookDidSharePhotoWithId:(NSString *)photoId {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shared!"
-                                                    message:@"Photo shared on Facebook."
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK" 
-                                          otherButtonTitles:nil];
-    [alert show];
-}
-
-- (void) facebookDidLogin {
-    [self sharePhotoToFacebook];
-}
+//- (void) sharePhotoToFacebook {
+//    for (UIView* subview in photoScrollView.subviews) {
+//        if (subview.tag == 1) {
+//            if (photoScrollView.contentOffset.x == subview.frame.origin.x) {
+//                UIImageView* imgView = (UIImageView*) subview;
+//                NSData* photoData = UIImagePNGRepresentation(imgView.image);
+//                [[LPFacebook shared] sharePhotoWithData:photoData];
+//            }
+//        }
+//    }                
+//}
+//
+//- (void) facebookDidSharePhotoWithId:(NSString *)photoId {
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shared!"
+//                                                    message:@"Photo shared on Facebook."
+//                                                   delegate:nil
+//                                          cancelButtonTitle:@"OK" 
+//                                          otherButtonTitles:nil];
+//    [alert show];
+//}
+//
+//- (void) facebookDidLogin {
+//    [self sharePhotoToFacebook];
+//}
 
 - (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 
