@@ -1,5 +1,5 @@
 //
-//  ETPhotoVC.m
+//  PJPhotoVC.m
 //  EverTrue
 //
 //  Created by PJ Gray on 12/15/11.
