@@ -100,10 +100,7 @@
     _opaque = self.navigationController.navigationBar.opaque;
     _tintColor = self.navigationController.navigationBar.tintColor;
     _backgroundColor = self.navigationController.navigationBar.backgroundColor;
-    
-    UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionTapped)];
-    self.navigationItem.rightBarButtonItem = actionButton;
-    
+        
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.opaque = YES;
     self.navigationController.navigationBar.tintColor = [UIColor clearColor];
@@ -135,20 +132,6 @@
     
 }
 
-- (void) actionTapped {
- 	UIActionSheet *externalActions = [[UIActionSheet alloc]
-                                      initWithTitle: self.title
-                                      delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      destructiveButtonTitle:nil
-//                                      otherButtonTitles:@"Save image to photos", @"Share on Facebook", nil];
-                                      otherButtonTitles:@"Save Image", nil];
-	
-	externalActions.actionSheetStyle = UIActionSheetStyleDefault;
-	
-    [externalActions showInView:self.view];
-}
-
 //- (void) sharePhotoToFacebook {
 //    for (UIView* subview in photoScrollView.subviews) {
 //        if (subview.tag == 1) {
@@ -173,50 +156,6 @@
 //- (void) facebookDidLogin {
 //    [self sharePhotoToFacebook];
 //}
-
-- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-
-    if (buttonIndex == 0) {
-        for (UIView* subview in photoScrollView.subviews) {
-            if (subview.tag == 1) {
-                if (photoScrollView.contentOffset.x == subview.frame.origin.x) {
-                    UIImageView* imgView = (UIImageView*) subview;
-                    _progressHud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    UIImageWriteToSavedPhotosAlbum(imgView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-                }
-            }
-        }
-    }
-//    else if (buttonIndex == 1) {
-//        [LPFacebook shared].delegate = self;
-//        if ([[LPFacebook shared].facebook isSessionValid]) {
-//            [self sharePhotoToFacebook];
-//        } else {
-//            [[LPFacebook shared] login];
-//        }
-//    }
-}
-
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
-{
-    
-    [_progressHud hide:YES];
-    // Was there an error?
-    if (error != NULL)
-    {
-        // Show error message...
-        
-    }
-    else  // No errors
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Saved!"
-                                                        message:@"Photo saved."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK" 
-                                              otherButtonTitles:nil];
-        [alert show];
-    }
-}
 
 - (void) viewWillDisappear:(BOOL)animated {
 //    [_fadeOutTimer invalidate];

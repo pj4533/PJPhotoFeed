@@ -10,7 +10,7 @@
 #import "MBProgressHUD.h"
 //#import "LPFacebook.h"
 
-@interface PJPhotoVC : UIViewController <UIScrollViewDelegate,UIActionSheetDelegate> {  //,LPFacebookDelegate> {
+@interface PJPhotoVC : UIViewController <UIScrollViewDelegate> {  //,LPFacebookDelegate> {
     MBProgressHUD* _progressHud;
 
     NSMutableArray* imagesLoaded;

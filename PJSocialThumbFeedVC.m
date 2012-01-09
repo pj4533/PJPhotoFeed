@@ -89,7 +89,7 @@
 	
     if (cell == nil) {
 		
-        NSArray* nibObjects = [[NSBundle mainBundle] loadNibNamed:@"ETPhotoThumbCell" owner:nil options:nil];
+        NSArray* nibObjects = [[NSBundle mainBundle] loadNibNamed:@"PJPhotoThumbCell" owner:nil options:nil];
         for (id currentObject in nibObjects) {
             if ([currentObject isKindOfClass:[PJPhotoThumbCell class]]) {
                 cell = (PJPhotoThumbCell*) currentObject;
