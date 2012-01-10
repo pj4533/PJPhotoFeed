@@ -41,5 +41,6 @@
 
 
 - (void) loadImageWithIndex:(NSInteger) index intoView:(UIImageView*) imageView;
+- (UIImageView*) currentlyDisplayedImageView;
 
 @end

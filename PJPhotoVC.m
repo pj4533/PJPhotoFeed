@@ -74,14 +74,6 @@
     CGFloat width = photoScrollView.frame.size.width;
     CGFloat height = photoScrollView.frame.size.height;
 
-    // first remove the object already at this index if necessary
-    if (arrayIndex < [imagesLoaded count]) {
-        UIView* prevView = [imagesLoaded objectAtIndex:arrayIndex];
-        if (prevView) {
-            [imagesLoaded removeObjectAtIndex:arrayIndex];
-        }
-    }
-    
     // then create the new object
     UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -96,9 +88,10 @@
     onePhotoScrollView.maximumZoomScale = 3.0f;
     onePhotoScrollView.delegate = onePhotoScrollView;
     [onePhotoScrollView addSubview:imageView];
-    
     [photoScrollView addSubview:onePhotoScrollView];
+    
     [imagesLoaded insertObject:imageView atIndex:arrayIndex];
+
     photoScrollView.contentSize = CGSizeMake(width * [imagesLoaded count], height);    
 }
 
@@ -280,6 +273,7 @@
                 if (subview.tag == 1) {
                     if (subview.frame.origin.x == 0.0f) {
                         [subview removeFromSuperview];
+                        [imagesLoaded removeObjectAtIndex:0];
                     } else if (subview.frame.origin.x == width) {
                         subview.frame = CGRectMake(0.0f, 0.0f, width, height);
                     } else if (subview.frame.origin.x == (width*2)) {
@@ -308,6 +302,7 @@
                         subview.frame = CGRectMake(width*2, 0.0f, width, height);
                     } else if (subview.frame.origin.x == (width*2)) {
                         [subview removeFromSuperview];
+                        [imagesLoaded removeObjectAtIndex:2];
                     }
                 }
             }
@@ -336,6 +331,13 @@
     }
 
     [self setCaptionForIndex:index];
+}
+
+- (UIImageView*) currentlyDisplayedImageView {
+
+    UIImageView* imgView = [imagesLoaded objectAtIndex:_currentArrayIndexShowing];
+    
+    return imgView;
 }
 
 @end
