@@ -55,6 +55,12 @@
     [UIApplication sharedApplication].statusBarHidden = NO;        
     [UIView commitAnimations];
     
+    
+    // this is a hack to handle a weird situation when coming back into the app with no status bar on a fullscreen view
+    CGRect navBarFrame = self.navigationController.navigationBar.frame;
+    self.navigationController.navigationBar.frame = CGRectMake(0.0, 20.0, navBarFrame.size.width, navBarFrame.size.height);
+
+    
     showingInfo = YES;
 }
 
@@ -102,6 +108,7 @@
 {
     [super viewDidLoad];
     
+    self.wantsFullScreenLayout = YES;
     
 //    _fadeOutTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(fadeOutUI) userInfo:nil repeats:NO];
 
