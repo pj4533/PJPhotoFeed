@@ -8,6 +8,7 @@
 
 #import "PJPhotoVC.h"
 //#import "LPFacebook.h"
+#import "PJPhotoScrollView.h"
 
 @implementation PJPhotoVC
 @synthesize photoDescription;
@@ -76,13 +77,21 @@
     }
     
     // then create the new object
-    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(width * arrayIndex, 0.0f, width, height)];
+    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.clipsToBounds = YES;
-    imageView.tag = 1;
     imageView.backgroundColor = [UIColor blackColor];
     [self loadImageWithIndex:imageIndex intoView:imageView];
-    [photoScrollView addSubview:imageView];
+
+    PJPhotoScrollView* onePhotoScrollView = [[PJPhotoScrollView alloc] initWithFrame:CGRectMake(width * arrayIndex, 0.0f, width, height)];
+    onePhotoScrollView.tag = 1;
+    onePhotoScrollView.imageView = imageView;
+    onePhotoScrollView.minimumZoomScale = 1.0f;
+    onePhotoScrollView.maximumZoomScale = 3.0f;
+    onePhotoScrollView.delegate = onePhotoScrollView;
+    [onePhotoScrollView addSubview:imageView];
+    
+    [photoScrollView addSubview:onePhotoScrollView];
     [imagesLoaded insertObject:imageView atIndex:arrayIndex];
     photoScrollView.contentSize = CGSizeMake(width * [imagesLoaded count], height);    
 }
@@ -192,9 +201,12 @@
         photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
 
         int i = 0;
-        for (UIImageView* view in photoScrollView.subviews) {
+        for (PJPhotoScrollView* view in photoScrollView.subviews) {
             if (view.tag == 1) {
+                view.zoomScale = 1.0f;
                 view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
+                view.contentSize = CGSizeMake(480.0f, 320.0f);
+                view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
             }
             i++;
         }
@@ -204,15 +216,18 @@
         photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
         
         int i = 0;
-        for (UIImageView* view in photoScrollView.subviews) {
+        for (PJPhotoScrollView* view in photoScrollView.subviews) {
             if (view.tag == 1) {
+                view.zoomScale = 1.0f;
                 view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
+                view.contentSize = CGSizeMake(320.0f, 480.0f);
+                view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
             }
             i++;
         }
 
     }
-    
+
     [photoScrollView setNeedsLayout];
     
 }
@@ -238,6 +253,7 @@
 - (void) loadImageWithIndex:(NSInteger) index intoView:(UIImageView*) imageView {
     NSLog(@"ERROR SHOULD NEVER GET CALLED");
 }
+
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
     if (_rotating)
@@ -297,6 +313,7 @@
     } else if (scrollView.contentOffset.x == width) {
         if (_currentArrayIndexShowing != 1) {
 
+            NSLog(@"4");
             if (_currentArrayIndexShowing == 0) {
                 index++;
                 scrollView.contentOffset = CGPointMake(width, 0.0f);
