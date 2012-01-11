@@ -40,7 +40,7 @@
 - (IBAction)tapped:(id)sender;
 
 
-- (void) loadImageWithIndex:(NSInteger) index intoView:(UIImageView*) imageView;
+- (void) loadImageWithIndex:(NSInteger) index intoView:(PJImageView*) imageView;
 - (PJImageView*) currentlyDisplayedImageView;
 
 @end
