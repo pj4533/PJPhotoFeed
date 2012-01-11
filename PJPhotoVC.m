@@ -86,7 +86,7 @@
     onePhotoScrollView.tag = 1;
     onePhotoScrollView.imageView = imageView;
     onePhotoScrollView.minimumZoomScale = 1.0f;
-    onePhotoScrollView.maximumZoomScale = 3.0f;
+    onePhotoScrollView.maximumZoomScale = 10.0f;
     onePhotoScrollView.delegate = onePhotoScrollView;
     [onePhotoScrollView addSubview:imageView];
     [photoScrollView addSubview:onePhotoScrollView];
