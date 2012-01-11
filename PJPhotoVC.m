@@ -9,6 +9,7 @@
 #import "PJPhotoVC.h"
 //#import "LPFacebook.h"
 #import "PJPhotoScrollView.h"
+#import "PJImageView.h"
 
 @implementation PJPhotoVC
 @synthesize photoDescription;
@@ -75,7 +76,7 @@
     CGFloat height = photoScrollView.frame.size.height;
 
     // then create the new object
-    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
+    PJImageView* imageView = [[PJImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.clipsToBounds = YES;
     imageView.backgroundColor = [UIColor blackColor];
@@ -114,7 +115,6 @@
     self.navigationController.navigationBar.opaque = YES;
     self.navigationController.navigationBar.tintColor = [UIColor clearColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-    
     [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
 
     showingInfo = YES;
@@ -165,6 +165,14 @@
 //- (void) facebookDidLogin {
 //    [self sharePhotoToFacebook];
 //}
+
+- (void) viewWillAppear:(BOOL)animated {
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.opaque = YES;
+    self.navigationController.navigationBar.tintColor = [UIColor clearColor];
+    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
+}
 
 - (void) viewWillDisappear:(BOOL)animated {
 //    [_fadeOutTimer invalidate];
@@ -250,8 +258,9 @@
     }
 }
 
-- (void) loadImageWithIndex:(NSInteger) index intoView:(UIImageView*) imageView {
+- (void) loadImageWithIndex:(NSInteger) index intoView:(PJImageView*) imageView {
     NSLog(@"ERROR SHOULD NEVER GET CALLED");
+    abort();
 }
 
 
@@ -333,9 +342,9 @@
     [self setCaptionForIndex:index];
 }
 
-- (UIImageView*) currentlyDisplayedImageView {
+- (PJImageView*) currentlyDisplayedImageView {
 
-    UIImageView* imgView = [imagesLoaded objectAtIndex:_currentArrayIndexShowing];
+    PJImageView* imgView = [imagesLoaded objectAtIndex:_currentArrayIndexShowing];
     
     return imgView;
 }

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
-//#import "LPFacebook.h"
+#import "PJImageView.h"
 
 @interface PJPhotoVC : UIViewController <UIScrollViewDelegate> {  //,LPFacebookDelegate> {
     MBProgressHUD* _progressHud;
@@ -41,6 +41,6 @@
 
 
 - (void) loadImageWithIndex:(NSInteger) index intoView:(UIImageView*) imageView;
-- (UIImageView*) currentlyDisplayedImageView;
+- (PJImageView*) currentlyDisplayedImageView;
 
 @end
