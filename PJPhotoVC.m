@@ -135,6 +135,8 @@
         [self loadImageWithIndex:index+1 intoArrayIndex:[imagesLoaded count]];
     }
 
+    [self setCaptionForIndex:index];
+    
     
     photoScrollView.contentSize = CGSizeMake(width * [imagesLoaded count], photoScrollView.frame.size.height);
     photoScrollView.contentOffset = CGPointMake(width * _currentArrayIndexShowing, 0.0f);
@@ -324,12 +326,11 @@
     } else if (scrollView.contentOffset.x == width) {
         if (_currentArrayIndexShowing != 1) {
 
-            NSLog(@"4");
             if (_currentArrayIndexShowing == 0) {
                 index++;
                 scrollView.contentOffset = CGPointMake(width, 0.0f);
-                [self loadImageWithIndex:index+1 intoArrayIndex:2];
-
+                if (index+1 < [self.feedData count])
+                    [self loadImageWithIndex:index+1 intoArrayIndex:2];
             } else {
                 index--;
             }
