@@ -20,8 +20,6 @@
     UIColor* _tintColor;
     UIColor* _backgroundColor;
     
-    NSTimer* _fadeOutTimer;
-    
     // this is the index in the 3 slot array of left center right image
     NSInteger _currentArrayIndexShowing;
     
@@ -42,5 +40,8 @@
 
 - (void) loadImageWithIndex:(NSInteger) index intoView:(PJImageView*) imageView;
 - (PJImageView*) currentlyDisplayedImageView;
+
+- (void) fadeOutUI;
+- (void) fadeInUI;
 
 @end

@@ -45,7 +45,6 @@
     [UIView commitAnimations];
     
     showingInfo = NO;
-//    [_fadeOutTimer invalidate];
 }
 
 - (void) fadeInUI {
@@ -104,7 +103,6 @@
     
     self.wantsFullScreenLayout = YES;
     
-//    _fadeOutTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(fadeOutUI) userInfo:nil repeats:NO];
 
     _translucent = self.navigationController.navigationBar.translucent;
     _opaque = self.navigationController.navigationBar.opaque;
@@ -176,9 +174,7 @@
     [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
 }
 
-- (void) viewWillDisappear:(BOOL)animated {
-//    [_fadeOutTimer invalidate];
-    
+- (void) viewWillDisappear:(BOOL)animated {    
     self.navigationController.navigationBar.translucent = _translucent;
     self.navigationController.navigationBar.opaque = _opaque;
     self.navigationController.navigationBar.tintColor = _tintColor;
