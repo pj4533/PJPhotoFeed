@@ -216,7 +216,9 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     _rotating = NO;
-    [self fadeInUI];
+    
+    if (self.interfaceOrientation != interfaceOrientation)
+        [self fadeInUI];
     return YES;
 }
 
