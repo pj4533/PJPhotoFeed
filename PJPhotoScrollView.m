@@ -12,6 +12,19 @@
 
 @synthesize imageView;
 
+- (id) initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        // then create the new object
+        imageView = [[PJImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, frame.size.width, frame.size.height)];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.clipsToBounds = YES;
+        imageView.backgroundColor = [UIColor blackColor];
+        [self addSubview:imageView];
+    }
+    
+    return self;
+}
 
 #pragma mark -
 #pragma mark Override layoutSubviews to center content

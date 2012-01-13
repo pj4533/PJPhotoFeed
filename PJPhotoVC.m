@@ -7,7 +7,6 @@
 //
 
 #import "PJPhotoVC.h"
-//#import "LPFacebook.h"
 #import "PJPhotoScrollView.h"
 #import "PJImageView.h"
 
@@ -15,6 +14,8 @@
 @synthesize photoDescription;
 @synthesize photoScrollView;
 @synthesize showingInfo;
+@synthesize singleTapGesture = _singleTapGesture;
+@synthesize doubleTapGesture = _doubleTapGesture;
 @synthesize feedData;
 @synthesize index;
 
@@ -74,25 +75,19 @@
     CGFloat width = photoScrollView.frame.size.width;
     CGFloat height = photoScrollView.frame.size.height;
 
-    // then create the new object
-    PJImageView* imageView = [[PJImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.clipsToBounds = YES;
-    imageView.backgroundColor = [UIColor blackColor];
-    [self loadImageWithIndex:imageIndex intoView:imageView];
-
     PJPhotoScrollView* onePhotoScrollView = [[PJPhotoScrollView alloc] initWithFrame:CGRectMake(width * arrayIndex, 0.0f, width, height)];
     onePhotoScrollView.tag = 1;
-    onePhotoScrollView.imageView = imageView;
     onePhotoScrollView.minimumZoomScale = 1.0f;
     onePhotoScrollView.maximumZoomScale = 10.0f;
     onePhotoScrollView.delegate = onePhotoScrollView;
-    [onePhotoScrollView addSubview:imageView];
     [photoScrollView addSubview:onePhotoScrollView];
     
-    [imagesLoaded insertObject:imageView atIndex:arrayIndex];
+    [imagesLoaded insertObject:onePhotoScrollView atIndex:arrayIndex];
 
     photoScrollView.contentSize = CGSizeMake(width * [imagesLoaded count], height);    
+
+    [self loadImageWithIndex:imageIndex intoView:onePhotoScrollView.imageView];
+    
 }
 
 #pragma mark - View lifecycle
@@ -104,6 +99,8 @@
     self.wantsFullScreenLayout = YES;
     
 
+    [self.singleTapGesture requireGestureRecognizerToFail:self.doubleTapGesture];
+    
     _translucent = self.navigationController.navigationBar.translucent;
     _opaque = self.navigationController.navigationBar.opaque;
     _tintColor = self.navigationController.navigationBar.tintColor;
@@ -141,31 +138,6 @@
     
 }
 
-//- (void) sharePhotoToFacebook {
-//    for (UIView* subview in photoScrollView.subviews) {
-//        if (subview.tag == 1) {
-//            if (photoScrollView.contentOffset.x == subview.frame.origin.x) {
-//                UIImageView* imgView = (UIImageView*) subview;
-//                NSData* photoData = UIImagePNGRepresentation(imgView.image);
-//                [[LPFacebook shared] sharePhotoWithData:photoData];
-//            }
-//        }
-//    }                
-//}
-//
-//- (void) facebookDidSharePhotoWithId:(NSString *)photoId {
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Shared!"
-//                                                    message:@"Photo shared on Facebook."
-//                                                   delegate:nil
-//                                          cancelButtonTitle:@"OK" 
-//                                          otherButtonTitles:nil];
-//    [alert show];
-//}
-//
-//- (void) facebookDidLogin {
-//    [self sharePhotoToFacebook];
-//}
-
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.opaque = YES;
@@ -186,6 +158,8 @@
 {
     [self setPhotoDescription:nil];
     [self setPhotoScrollView:nil];
+    [self setSingleTapGesture:nil];
+    [self setDoubleTapGesture:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -256,6 +230,23 @@
     }
 }
 
+- (IBAction)doubleTapped:(id)sender {
+
+    PJPhotoScrollView* thisScrollView = [imagesLoaded objectAtIndex:_currentArrayIndexShowing];
+    
+    if (thisScrollView.zoomScale == 1.0f) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.5f];
+        thisScrollView.zoomScale = 3.0f;
+        [UIView commitAnimations];
+    } else {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.5f];
+        thisScrollView.zoomScale = 1.0f;
+        [UIView commitAnimations];
+    }
+}
+
 - (void) loadImageWithIndex:(NSInteger) index intoView:(PJImageView*) imageView {
     NSLog(@"ERROR SHOULD NEVER GET CALLED");
     abort();
@@ -271,23 +262,24 @@
     CGFloat width = scrollView.frame.size.width;
     CGFloat height = scrollView.frame.size.height;
     
+    
+    // possibly i don't need this....can't I just use the imagesLoaded array to get this scroll view not use
+    // a for loop
     if ((scrollView.contentOffset.x == (width*2)) && (_currentArrayIndexShowing != 2)) {
         index++;
         if ((index+1) < [self.feedData count]) {
             // this section should remove the leftmost view, move the center and right
             // ones to the left, and create a new one to the right.
-            for (UIView* subview in scrollView.subviews) {
-                if (subview.tag == 1) {
-                    if (subview.frame.origin.x == 0.0f) {
-                        [subview removeFromSuperview];
-                        [imagesLoaded removeObjectAtIndex:0];
-                    } else if (subview.frame.origin.x == width) {
-                        subview.frame = CGRectMake(0.0f, 0.0f, width, height);
-                    } else if (subview.frame.origin.x == (width*2)) {
-                        subview.frame = CGRectMake(width, 0.0f, width, height);
-                    }
-                }
-            }
+            PJPhotoScrollView* right = [imagesLoaded objectAtIndex:2];
+            right.frame = CGRectMake(width, 0.0f, width, height);
+            
+            PJPhotoScrollView* middle = [imagesLoaded objectAtIndex:1];
+            middle.frame = CGRectMake(0.0f, 0.0f, width, height);
+            
+            PJPhotoScrollView* left = [imagesLoaded objectAtIndex:0];
+            [left removeFromSuperview];
+            [imagesLoaded removeObjectAtIndex:0];
+            
             _currentArrayIndexShowing = 1;
             scrollView.contentOffset = CGPointMake(width, 0.0f);
             [self loadImageWithIndex:index+1 intoArrayIndex:2];
@@ -301,18 +293,16 @@
         if ((index-1) >= 0) {
             // this section should remove the rightmost view, move the center and left
             // to the right and create a new one to the left
-            for (UIView* subview in scrollView.subviews) {
-                if (subview.tag == 1) {
-                    if (subview.frame.origin.x == 0.0f) {
-                        subview.frame = CGRectMake(width, 0.0f, width, height);
-                    } else if (subview.frame.origin.x == width) {
-                        subview.frame = CGRectMake(width*2, 0.0f, width, height);
-                    } else if (subview.frame.origin.x == (width*2)) {
-                        [subview removeFromSuperview];
-                        [imagesLoaded removeObjectAtIndex:2];
-                    }
-                }
-            }
+            PJPhotoScrollView* left = [imagesLoaded objectAtIndex:0];
+            left.frame = CGRectMake(width, 0.0f, width, height);
+            
+            PJPhotoScrollView* middle = [imagesLoaded objectAtIndex:1];
+            middle.frame = CGRectMake(width*2, 0.0f, width, height);
+            
+            PJPhotoScrollView* right = [imagesLoaded objectAtIndex:2];
+            [right removeFromSuperview];
+            [imagesLoaded removeObjectAtIndex:2];
+            
             _currentArrayIndexShowing = 1;
             scrollView.contentOffset = CGPointMake(width, 0.0f);
             [self loadImageWithIndex:index-1 intoArrayIndex:0];
@@ -341,7 +331,8 @@
 
 - (PJImageView*) currentlyDisplayedImageView {
 
-    PJImageView* imgView = [imagesLoaded objectAtIndex:_currentArrayIndexShowing];
+    PJPhotoScrollView* currentScrollView = [imagesLoaded objectAtIndex:_currentArrayIndexShowing];
+    PJImageView* imgView = currentScrollView.imageView;
     
     return imgView;
 }

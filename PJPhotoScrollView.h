@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PJImageView.h"
 
 @interface PJPhotoScrollView : UIScrollView <UIScrollViewDelegate>
 
 
-@property (strong, nonatomic) UIImageView* imageView;
+@property (strong, nonatomic) PJImageView* imageView;
 
 @end
