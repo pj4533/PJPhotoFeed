@@ -232,18 +232,16 @@
 
 - (IBAction)doubleTapped:(id)sender {
 
+    UIGestureRecognizer* theTap = (UIGestureRecognizer*) sender;
+    
     PJPhotoScrollView* thisScrollView = [imagesLoaded objectAtIndex:_currentArrayIndexShowing];
     
     if (thisScrollView.zoomScale == 1.0f) {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.5f];
-        thisScrollView.zoomScale = 3.0f;
-        [UIView commitAnimations];
+        CGPoint centerPoint = [theTap locationInView:[imagesLoaded objectAtIndex:_currentArrayIndexShowing]];
+        CGRect toZoom = CGRectMake(centerPoint.x - 50.0f, centerPoint.y - 50.0f, 100.0f, 100.0f);
+        [thisScrollView zoomToRect:toZoom animated:YES];
     } else {
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.5f];
-        thisScrollView.zoomScale = 1.0f;
-        [UIView commitAnimations];
+        [thisScrollView setZoomScale:1.0f animated:YES];
     }
 }
 
