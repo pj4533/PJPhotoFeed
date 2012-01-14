@@ -34,8 +34,6 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *photoScrollView;
 @property (strong, nonatomic) IBOutlet UILabel *photoDescription;
 @property BOOL showingInfo;
-@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *singleTapGesture;
-@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *doubleTapGesture;
 
 - (IBAction)tapped:(id)sender;
 - (IBAction)doubleTapped:(id)sender;

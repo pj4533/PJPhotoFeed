@@ -14,8 +14,6 @@
 @synthesize photoDescription;
 @synthesize photoScrollView;
 @synthesize showingInfo;
-@synthesize singleTapGesture = _singleTapGesture;
-@synthesize doubleTapGesture = _doubleTapGesture;
 @synthesize feedData;
 @synthesize index;
 
@@ -98,8 +96,13 @@
     
     self.wantsFullScreenLayout = YES;
     
+    UITapGestureRecognizer* doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapped:)];
+    doubleTapGesture.numberOfTapsRequired = 2;
+    [self.photoScrollView addGestureRecognizer:doubleTapGesture];
 
-    [self.singleTapGesture requireGestureRecognizerToFail:self.doubleTapGesture];
+    UITapGestureRecognizer* singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
+    [singleTapGesture requireGestureRecognizerToFail:doubleTapGesture];
+    [self.photoScrollView addGestureRecognizer:singleTapGesture];
     
     _translucent = self.navigationController.navigationBar.translucent;
     _opaque = self.navigationController.navigationBar.opaque;
@@ -158,8 +161,6 @@
 {
     [self setPhotoDescription:nil];
     [self setPhotoScrollView:nil];
-    [self setSingleTapGesture:nil];
-    [self setDoubleTapGesture:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
