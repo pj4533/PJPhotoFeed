@@ -178,18 +178,16 @@
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
         
         CGFloat contentOffsetX = _currentArrayIndexShowing * 480.0f;        
-        photoScrollView.contentSize = CGSizeMake(480.0f * [imagesLoaded count], 320.0f);
+        photoScrollView.contentSize = CGSizeMake(480.0f * [imagesLoaded count], 320.0f);        
         photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
 
         int i = 0;
-        for (PJPhotoScrollView* view in photoScrollView.subviews) {
-            if (view.tag == 1) {
-                view.zoomScale = 1.0f;
-                view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
-                view.contentSize = CGSizeMake(480.0f, 320.0f);
-                view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
-            }
-            i++;
+        for (PJPhotoScrollView* view in imagesLoaded) {
+            view.zoomScale = 1.0f;
+            view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
+            view.contentSize = CGSizeMake(480.0f, 320.0f);
+            view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
+            i++;            
         }
     } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
         CGFloat contentOffsetX = _currentArrayIndexShowing * 320.0f;        
@@ -197,27 +195,23 @@
         photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
         
         int i = 0;
-        for (PJPhotoScrollView* view in photoScrollView.subviews) {
-            if (view.tag == 1) {
-                view.zoomScale = 1.0f;
-                view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
-                view.contentSize = CGSizeMake(320.0f, 480.0f);
-                view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
-            }
+        for (PJPhotoScrollView* view in imagesLoaded) {
+            view.zoomScale = 1.0f;
+            view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
+            view.contentSize = CGSizeMake(320.0f, 480.0f);
+            view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
             i++;
         }
-
     }
 
     [photoScrollView setNeedsLayout];
     
+    _rotating = NO;
 }
 
 // autorotate not loading right initialling (need to scroll to reset)
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    _rotating = NO;
-    
     if (self.interfaceOrientation != interfaceOrientation)
         [self fadeInUI];
     return YES;
@@ -300,13 +294,15 @@
             PJPhotoScrollView* middle = [imagesLoaded objectAtIndex:1];
             middle.frame = CGRectMake(width*2, 0.0f, width, height);
             
-            PJPhotoScrollView* right = [imagesLoaded objectAtIndex:2];
-            [right removeFromSuperview];
-            [imagesLoaded removeObjectAtIndex:2];
+            if ([imagesLoaded count] == 3) {
+                PJPhotoScrollView* right = [imagesLoaded objectAtIndex:2];
+                [right removeFromSuperview];
+                [imagesLoaded removeObjectAtIndex:2];
+            }
             
             _currentArrayIndexShowing = 1;
             scrollView.contentOffset = CGPointMake(width, 0.0f);
-            [self loadImageWithIndex:index-1 intoArrayIndex:0];
+            [self loadImageWithIndex:index-1 intoArrayIndex:0];            
         } else {
             _currentArrayIndexShowing = 0;
         }
@@ -316,8 +312,9 @@
             if (_currentArrayIndexShowing == 0) {
                 index++;
                 scrollView.contentOffset = CGPointMake(width, 0.0f);
-                if (index+1 < [self.feedData count])
+                if (index+1 < [self.feedData count]) {
                     [self loadImageWithIndex:index+1 intoArrayIndex:2];
+                }
             } else {
                 index--;
             }
