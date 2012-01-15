@@ -7,8 +7,7 @@
 //
 
 #import "PJSocialFeedVC.h"
-#import "PJPhotoThumbCell.h"
 
-@interface PJSocialThumbFeedVC : PJSocialFeedVC <UIScrollViewDelegate, PJPhotoThumbCellDelegate>
+@interface PJSocialThumbFeedVC : PJSocialFeedVC <UIScrollViewDelegate>
 
 @end

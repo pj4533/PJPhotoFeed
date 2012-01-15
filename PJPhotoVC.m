@@ -96,7 +96,7 @@
     
     self.wantsFullScreenLayout = YES;
     
-    _internalOrientation = self.interfaceOrientation;
+    _internalOrientation = UIInterfaceOrientationPortrait;//self.interfaceOrientation;
 
     UITapGestureRecognizer* doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapped:)];
     doubleTapGesture.numberOfTapsRequired = 2;
