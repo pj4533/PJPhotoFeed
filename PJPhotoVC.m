@@ -96,6 +96,8 @@
     
     self.wantsFullScreenLayout = YES;
     
+    _internalOrientation = self.interfaceOrientation;
+
     UITapGestureRecognizer* doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapped:)];
     doubleTapGesture.numberOfTapsRequired = 2;
     [self.photoScrollView addGestureRecognizer:doubleTapGesture];
@@ -142,39 +144,42 @@
 }
 
 - (void) updateOrientation {
-    UIInterfaceOrientation interfaceOrientation = self.interfaceOrientation;
     
-    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+    if (_internalOrientation != self.interfaceOrientation) {
+        UIInterfaceOrientation interfaceOrientation = self.interfaceOrientation;
         
-        CGFloat contentOffsetX = _currentArrayIndexShowing * 480.0f;        
-        photoScrollView.contentSize = CGSizeMake(480.0f * [imagesLoaded count], 320.0f);        
-        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
-        
-        int i = 0;
-        for (PJPhotoScrollView* view in imagesLoaded) {
-            view.zoomScale = 1.0f;
-            view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
-            view.contentSize = CGSizeMake(480.0f, 320.0f);
-            view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
-            i++;            
+        if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+            
+            CGFloat contentOffsetX = _currentArrayIndexShowing * 480.0f;        
+            photoScrollView.contentSize = CGSizeMake(480.0f * [imagesLoaded count], 320.0f);        
+            photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
+            
+            int i = 0;
+            for (PJPhotoScrollView* view in imagesLoaded) {
+                view.zoomScale = 1.0f;
+                view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
+                view.contentSize = CGSizeMake(480.0f, 320.0f);
+                view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
+                i++;            
+            }
+        } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+            CGFloat contentOffsetX = _currentArrayIndexShowing * 320.0f;        
+            photoScrollView.contentSize = CGSizeMake(320.0f * [imagesLoaded count], 480.0f);
+            photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
+            
+            int i = 0;
+            for (PJPhotoScrollView* view in imagesLoaded) {
+                view.zoomScale = 1.0f;
+                view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
+                view.contentSize = CGSizeMake(320.0f, 480.0f);
+                view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
+                i++;
+            }
         }
-    } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
-        CGFloat contentOffsetX = _currentArrayIndexShowing * 320.0f;        
-        photoScrollView.contentSize = CGSizeMake(320.0f * [imagesLoaded count], 480.0f);
-        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
         
-        int i = 0;
-        for (PJPhotoScrollView* view in imagesLoaded) {
-            view.zoomScale = 1.0f;
-            view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
-            view.contentSize = CGSizeMake(320.0f, 480.0f);
-            view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
-            i++;
-        }
-    }
-    
-    [photoScrollView setNeedsLayout];
-    
+        [photoScrollView setNeedsLayout];
+        _internalOrientation = interfaceOrientation;
+    }    
 }
 
 - (void) viewWillAppear:(BOOL)animated {

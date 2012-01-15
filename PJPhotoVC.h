@@ -24,6 +24,9 @@
     NSInteger _currentArrayIndexShowing;
     
     BOOL _rotating;
+    
+    // doesn't seem right I need to keep track of this...
+    UIInterfaceOrientation _internalOrientation;
 }
 
 @property (strong, nonatomic) NSArray* feedData;
