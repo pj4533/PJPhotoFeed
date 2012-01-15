@@ -143,43 +143,46 @@
     
 }
 
-- (void) updateOrientation {
+- (void) updateViewToOrientation:(UIInterfaceOrientation) interfaceOrientation withDuration:(NSTimeInterval) duration {
     
-    if (_internalOrientation != self.interfaceOrientation) {
-        UIInterfaceOrientation interfaceOrientation = self.interfaceOrientation;
+    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
         
-        if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+        CGFloat contentOffsetX = _currentArrayIndexShowing * 480.0f;        
+        photoScrollView.contentSize = CGSizeMake(480.0f * [imagesLoaded count], 320.0f);        
+        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
+        
+        int i = 0;
+        for (PJPhotoScrollView* view in imagesLoaded) {
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:duration];
+            view.zoomScale = 1.0f;
+            view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
+            view.contentSize = CGSizeMake(480.0f, 320.0f);
+            view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
+            [UIView commitAnimations];
             
-            CGFloat contentOffsetX = _currentArrayIndexShowing * 480.0f;        
-            photoScrollView.contentSize = CGSizeMake(480.0f * [imagesLoaded count], 320.0f);        
-            photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
-            
-            int i = 0;
-            for (PJPhotoScrollView* view in imagesLoaded) {
-                view.zoomScale = 1.0f;
-                view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
-                view.contentSize = CGSizeMake(480.0f, 320.0f);
-                view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
-                i++;            
-            }
-        } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
-            CGFloat contentOffsetX = _currentArrayIndexShowing * 320.0f;        
-            photoScrollView.contentSize = CGSizeMake(320.0f * [imagesLoaded count], 480.0f);
-            photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
-            
-            int i = 0;
-            for (PJPhotoScrollView* view in imagesLoaded) {
-                view.zoomScale = 1.0f;
-                view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
-                view.contentSize = CGSizeMake(320.0f, 480.0f);
-                view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
-                i++;
-            }
+            i++;            
         }
+    } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+        CGFloat contentOffsetX = _currentArrayIndexShowing * 320.0f;        
+        photoScrollView.contentSize = CGSizeMake(320.0f * [imagesLoaded count], 480.0f);
+        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
         
-        [photoScrollView setNeedsLayout];
-        _internalOrientation = interfaceOrientation;
-    }    
+        int i = 0;
+        for (PJPhotoScrollView* view in imagesLoaded) {
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:duration];
+            view.zoomScale = 1.0f;
+            view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
+            view.contentSize = CGSizeMake(320.0f, 480.0f);
+            view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
+            [UIView commitAnimations];
+            i++;
+        }
+    }
+    
+    [photoScrollView setNeedsLayout];
+    _internalOrientation = interfaceOrientation;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -189,7 +192,9 @@
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
     
-    [self updateOrientation];
+    if (_internalOrientation != self.interfaceOrientation) {
+        [self updateViewToOrientation:self.interfaceOrientation withDuration:0.1f];
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {    
@@ -211,20 +216,20 @@
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     _rotating = YES;
+    
+    UIInterfaceOrientation interfaceOrientation = toInterfaceOrientation;
+    
+    [self updateViewToOrientation:interfaceOrientation withDuration:duration];
 }
 
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [self updateOrientation];
-    
     _rotating = NO;
 }
 
 // autorotate not loading right initialling (need to scroll to reset)
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if (self.interfaceOrientation != interfaceOrientation)
-        [self fadeInUI];
     return YES;
 }
 
