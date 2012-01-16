@@ -88,6 +88,59 @@
     
 }
 
+- (void) updateViewToOrientation:(UIInterfaceOrientation) interfaceOrientation withDuration:(NSTimeInterval) duration {
+    CGFloat longSide;
+    CGFloat shortSide;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        longSide = 480.0f;
+        shortSide = 320.0f;
+    } else {
+        longSide = 1024.0f;
+        shortSide = 768.0f;
+    }
+    
+    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+        
+        CGFloat contentOffsetX = _currentArrayIndexShowing * longSide;        
+        photoScrollView.contentSize = CGSizeMake(longSide * [imagesLoaded count], shortSide);        
+        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
+        
+        int i = 0;
+        for (PJPhotoScrollView* view in imagesLoaded) {
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:duration];
+            view.zoomScale = 1.0f;
+            view.frame = CGRectMake(i * longSide, 0.0f, longSide, shortSide);
+            view.contentSize = CGSizeMake(longSide, shortSide);
+            view.imageView.frame = CGRectMake(0.0f, 0.0f, longSide, shortSide);
+            [UIView commitAnimations];
+            
+            i++;            
+        }
+    } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+        NSLog(@"here");
+        CGFloat contentOffsetX = _currentArrayIndexShowing * shortSide;        
+        photoScrollView.contentSize = CGSizeMake(shortSide * [imagesLoaded count], longSide);
+        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
+        
+        int i = 0;
+        for (PJPhotoScrollView* view in imagesLoaded) {
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:duration];
+            view.zoomScale = 1.0f;
+            view.frame = CGRectMake(i * shortSide, 0.0f, shortSide, longSide);
+            view.contentSize = CGSizeMake(shortSide, longSide);
+            view.imageView.frame = CGRectMake(0.0f, 0.0f, shortSide, longSide);
+            [UIView commitAnimations];
+            i++;
+        }
+    }
+    
+    [photoScrollView setNeedsLayout];
+    _internalOrientation = interfaceOrientation;
+}
+
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -96,7 +149,7 @@
     
     self.wantsFullScreenLayout = YES;
     
-    _internalOrientation = UIInterfaceOrientationPortrait;//self.interfaceOrientation;
+    _internalOrientation = UIInterfaceOrientationPortrait;//self.interfaceOrientation;        
 
     UITapGestureRecognizer* doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapped:)];
     doubleTapGesture.numberOfTapsRequired = 2;
@@ -141,48 +194,10 @@
     photoScrollView.contentSize = CGSizeMake(width * [imagesLoaded count], photoScrollView.frame.size.height);
     photoScrollView.contentOffset = CGPointMake(width * _currentArrayIndexShowing, 0.0f);
     
-}
-
-- (void) updateViewToOrientation:(UIInterfaceOrientation) interfaceOrientation withDuration:(NSTimeInterval) duration {
     
-    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
-        
-        CGFloat contentOffsetX = _currentArrayIndexShowing * 480.0f;        
-        photoScrollView.contentSize = CGSizeMake(480.0f * [imagesLoaded count], 320.0f);        
-        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
-        
-        int i = 0;
-        for (PJPhotoScrollView* view in imagesLoaded) {
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:duration];
-            view.zoomScale = 1.0f;
-            view.frame = CGRectMake(i * 480.0f, 0.0f, 480.0f, 320.0f);
-            view.contentSize = CGSizeMake(480.0f, 320.0f);
-            view.imageView.frame = CGRectMake(0.0f, 0.0f, 480.0f, 320.0f);
-            [UIView commitAnimations];
-            
-            i++;            
-        }
-    } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
-        CGFloat contentOffsetX = _currentArrayIndexShowing * 320.0f;        
-        photoScrollView.contentSize = CGSizeMake(320.0f * [imagesLoaded count], 480.0f);
-        photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
-        
-        int i = 0;
-        for (PJPhotoScrollView* view in imagesLoaded) {
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:duration];
-            view.zoomScale = 1.0f;
-            view.frame = CGRectMake(i * 320.0f, 0.0f, 320.0f, 480.0f);
-            view.contentSize = CGSizeMake(320.0f, 480.0f);
-            view.imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 480.0f);
-            [UIView commitAnimations];
-            i++;
-        }
-    }
-    
-    [photoScrollView setNeedsLayout];
-    _internalOrientation = interfaceOrientation;
+    // this is a hack, but works to make sure it updates from the nib properly
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        [self updateViewToOrientation:self.interfaceOrientation withDuration:0.1f];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -194,7 +209,7 @@
     
     if (_internalOrientation != self.interfaceOrientation) {
         [self updateViewToOrientation:self.interfaceOrientation withDuration:0.1f];
-    }
+    }    
 }
 
 - (void) viewWillDisappear:(BOOL)animated {    
@@ -251,7 +266,13 @@
     
     if (thisScrollView.zoomScale == 1.0f) {
         CGPoint centerPoint = [theTap locationInView:[imagesLoaded objectAtIndex:_currentArrayIndexShowing]];
-        CGRect toZoom = CGRectMake(centerPoint.x - 50.0f, centerPoint.y - 50.0f, 100.0f, 100.0f);
+        
+        CGRect toZoom;
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+            toZoom = CGRectMake(centerPoint.x - 50.0f, centerPoint.y - 50.0f, 100.0f, 100.0f);
+        else
+            toZoom = CGRectMake(centerPoint.x - 50.0f, centerPoint.y - 50.0f, 200.0f, 200.0f);
+
         [thisScrollView zoomToRect:toZoom animated:YES];
     } else {
         [thisScrollView setZoomScale:1.0f animated:YES];
