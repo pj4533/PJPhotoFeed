@@ -17,7 +17,7 @@
     if (self) {
         // then create the new object
         imageView = [[PJImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, frame.size.width, frame.size.height)];
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.contentMode = UIViewContentModeCenter;//UIViewContentModeScaleAspectFit;
         imageView.clipsToBounds = YES;
         imageView.backgroundColor = [UIColor blackColor];
         [self addSubview:imageView];

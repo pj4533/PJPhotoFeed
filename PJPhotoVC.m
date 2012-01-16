@@ -118,7 +118,6 @@
             i++;            
         }
     } else if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
-        NSLog(@"here");
         CGFloat contentOffsetX = _currentArrayIndexShowing * shortSide;        
         photoScrollView.contentSize = CGSizeMake(shortSide * [imagesLoaded count], longSide);
         photoScrollView.contentOffset = CGPointMake(contentOffsetX, 0.0f);
@@ -168,7 +167,8 @@
     self.navigationController.navigationBar.opaque = YES;
     self.navigationController.navigationBar.tintColor = [UIColor clearColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-    [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+        [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
 
     showingInfo = YES;
     
@@ -205,7 +205,8 @@
     self.navigationController.navigationBar.opaque = YES;
     self.navigationController.navigationBar.tintColor = [UIColor clearColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-    [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+        [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
     
     if (_internalOrientation != self.interfaceOrientation) {
         [self updateViewToOrientation:self.interfaceOrientation withDuration:0.1f];
