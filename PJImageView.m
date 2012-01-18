@@ -10,5 +10,6 @@
 
 @implementation PJImageView
 @synthesize url;
+@synthesize zoomScale;
 
 @end

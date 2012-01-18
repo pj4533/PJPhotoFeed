@@ -20,6 +20,7 @@
         imageView.contentMode = UIViewContentModeCenter;//UIViewContentModeScaleAspectFit;
         imageView.clipsToBounds = YES;
         imageView.backgroundColor = [UIColor blackColor];
+        imageView.zoomScale = 1.0f;
         [self addSubview:imageView];
     }
     
@@ -60,6 +61,11 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return imageView;
+}
+
+- (void) scrollViewDidZoom:(UIScrollView *)scrollView {
+    PJPhotoScrollView* pjScrollView = (PJPhotoScrollView*) scrollView;
+    pjScrollView.imageView.zoomScale = pjScrollView.zoomScale;    
 }
 
 

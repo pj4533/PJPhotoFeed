@@ -11,5 +11,6 @@
 @interface PJImageView : UIImageView
 
 @property (strong, nonatomic) NSString* url;
+@property CGFloat zoomScale;
 
 @end
