@@ -88,6 +88,8 @@
             // create UIImageView,  create UIButton   use tag for index?
             CGRect frameRect = CGRectMake((75.0 * i) + 4.0 + (4.0 * i), 2, 75.0, 75.0);
             UIImageView* imageView = [[UIImageView alloc] initWithFrame:frameRect];
+            imageView.clipsToBounds = YES;
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
             imageView.tag = imageOffset;
             [self loadImageWithURL:[self getUrlForIndex:imageOffset] intoImageView:imageView];
             [cell addSubview:imageView];
