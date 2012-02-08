@@ -16,6 +16,8 @@
 @synthesize showingInfo;
 @synthesize feedData;
 @synthesize index;
+@synthesize indexOfFirstImageOnPage;
+@synthesize totalImages;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

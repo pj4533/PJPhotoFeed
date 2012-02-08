@@ -10,4 +10,10 @@
 
 @interface PJSocialThumbFeedVC : PJSocialFeedVC <UIScrollViewDelegate>
 
+
+@property NSInteger total;
+@property NSInteger page;
+@property NSInteger perPage;
+
+
 @end

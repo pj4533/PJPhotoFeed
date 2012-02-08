@@ -10,11 +10,16 @@
 
 @implementation PJSocialThumbFeedVC
 
+@synthesize total;
+@synthesize page;
+@synthesize perPage;
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.feedTableView.separatorStyle = UITableViewCellSeparatorStyleNone; 
 }
 
@@ -118,7 +123,9 @@
     NSArray* visibleIndexPaths = [self.feedTableView indexPathsForVisibleRows];
     for (NSIndexPath* indexPath in visibleIndexPaths) {
         UITableViewCell* cell = [self.feedTableView cellForRowAtIndexPath:indexPath];
-        [self loadImagesForCell:cell atIndexPath:indexPath];
+        // was decelerating, so we need to reload
+        if (cell.tag)
+            [self loadImagesForCell:cell atIndexPath:indexPath];            
     }
 }
 
@@ -136,8 +143,10 @@
     cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, tableView.frame.size.width, 79.0);
     
     if (![self.feedTableView isDecelerating]) {
+        cell.tag = 0;
         [self loadImagesForCell:cell atIndexPath:indexPath];        
     } else {
+        cell.tag = 1;
         [self loadPlaceholderImagesForCell:cell atIndexPath:indexPath];
     }
     

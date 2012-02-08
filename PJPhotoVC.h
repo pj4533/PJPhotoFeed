@@ -33,6 +33,8 @@
 
 // this is the index into the full list of images
 @property NSInteger index;
+@property NSInteger indexOfFirstImageOnPage;
+@property NSInteger totalImages;
 
 @property (strong, nonatomic) IBOutlet UIScrollView *photoScrollView;
 @property (strong, nonatomic) IBOutlet UILabel *photoDescription;
