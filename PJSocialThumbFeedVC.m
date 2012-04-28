@@ -10,6 +10,10 @@
 
 @implementation PJSocialThumbFeedVC
 
+@synthesize total;
+@synthesize page;
+@synthesize perPage;
+
 #pragma mark - View lifecycle
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

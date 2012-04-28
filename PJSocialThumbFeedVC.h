@@ -12,4 +12,8 @@
     CGFloat _thumbnailWidth;
 }
 
+@property NSInteger total;
+@property NSInteger page;
+@property NSInteger perPage;
+
 @end
