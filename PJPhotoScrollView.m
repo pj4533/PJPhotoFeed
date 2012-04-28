@@ -17,7 +17,7 @@
     if (self) {
         // then create the new object
         imageView = [[PJImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, frame.size.width, frame.size.height)];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;// UIViewContentModeScaleAspectFit;
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.clipsToBounds = YES;
         imageView.backgroundColor = [UIColor blackColor];
         imageView.zoomScale = 1.0f;
