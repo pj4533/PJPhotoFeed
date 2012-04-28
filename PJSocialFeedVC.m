@@ -12,6 +12,7 @@
 @implementation PJSocialFeedVC
 @synthesize feedTableView = _feedTableView;
 @synthesize feedName;
+@synthesize externalUrl;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,11 +35,47 @@
     NSLog(@"SHOULD NEVER GET CALLED");
 }
 
+
+
+- (void) openExternalUrl : (id)sender {
+ 	
+	UIActionSheet *externalActions = [[UIActionSheet alloc]
+                                      initWithTitle: self.title
+                                      delegate:self
+                                      cancelButtonTitle:@"Cancel"
+                                      destructiveButtonTitle:nil
+                                      otherButtonTitles:@"Open in Safari", nil];
+	
+	externalActions.actionSheetStyle = UIActionSheetStyleDefault;
+	
+	[externalActions showFromTabBar:self.tabBarController.tabBar];	
+}
+
+- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ( buttonIndex == 0 ) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:externalUrl]];
+    }	
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (self.externalUrl) {
+        self.tabBarController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                                   initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                   target:self 
+                                                                   action:@selector(openExternalUrl:)];
+        
+    }
+    
+}
+
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
     self.tabBarController.navigationItem.rightBarButtonItem = nil;
 }
+
 
 
 #pragma mark - View lifecycle

@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MBProgressHUD.h"
 
 @interface PJImageView : UIImageView
 
 @property (strong, nonatomic) NSString* url;
 @property CGFloat zoomScale;
+@property (strong, nonatomic) MBProgressHUD* progressHud;
 
 @end

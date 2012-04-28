@@ -15,5 +15,6 @@
 }
 @property (strong, nonatomic) IBOutlet UITableView *feedTableView;
 @property (nonatomic, strong) NSString* feedName;
+@property (strong, nonatomic) NSString* externalUrl;
 
 @end

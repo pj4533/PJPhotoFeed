@@ -12,12 +12,12 @@
 
 @implementation PJPhotoVC
 @synthesize photoDescription;
+@synthesize fillerRightSide = _fillerRightSide;
+@synthesize fillerLeftSide = _fillerLeftSide;
 @synthesize photoScrollView;
 @synthesize showingInfo;
 @synthesize feedData;
 @synthesize index;
-@synthesize indexOfFirstImageOnPage;
-@synthesize totalImages;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -40,7 +40,9 @@
 - (void) fadeOutUI {
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.5f];
-    photoDescription.alpha = 0.0f;        
+    photoDescription.alpha = 0.0f;
+    self.fillerLeftSide.alpha = 0.0f;
+    self.fillerRightSide.alpha = 0.0f;
     [self.navigationController.navigationBar setAlpha:0.0f];
     [UIApplication sharedApplication].statusBarHidden = YES;        
     [UIView commitAnimations];
@@ -52,6 +54,8 @@
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.5f];
     photoDescription.alpha = 1.0f;
+    self.fillerLeftSide.alpha = 1.0f;
+    self.fillerRightSide.alpha = 1.0f;
     [self.navigationController.navigationBar setAlpha:1.0f];        
     [UIApplication sharedApplication].statusBarHidden = NO;        
     [UIView commitAnimations];
@@ -227,6 +231,8 @@
 {
     [self setPhotoDescription:nil];
     [self setPhotoScrollView:nil];
+    [self setFillerRightSide:nil];
+    [self setFillerLeftSide:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -287,6 +293,8 @@
     abort();
 }
 
+- (void) didChangeImage:(NSInteger) index {
+}
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
     if (_rotating)
@@ -321,7 +329,8 @@
         } else {
             _currentArrayIndexShowing = 2;
         }
-
+        
+        [self didChangeImage:index];
     } else if ((scrollView.contentOffset.x == 0.0f) && (_currentArrayIndexShowing != 0)){
 
         index--;
@@ -346,6 +355,7 @@
         } else {
             _currentArrayIndexShowing = 0;
         }
+        [self didChangeImage:index];
     } else if (scrollView.contentOffset.x == width) {
         if (_currentArrayIndexShowing != 1) {
 
@@ -362,6 +372,7 @@
             _currentArrayIndexShowing = 1;
         }
 
+        [self didChangeImage:index];
     }
 
     [self setCaptionForIndex:index];

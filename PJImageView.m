@@ -11,5 +11,6 @@
 @implementation PJImageView
 @synthesize url;
 @synthesize zoomScale;
+@synthesize progressHud;
 
 @end

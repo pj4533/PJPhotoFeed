@@ -8,12 +8,8 @@
 
 #import "PJSocialFeedVC.h"
 
-@interface PJSocialThumbFeedVC : PJSocialFeedVC <UIScrollViewDelegate>
-
-
-@property NSInteger total;
-@property NSInteger page;
-@property NSInteger perPage;
-
+@interface PJSocialThumbFeedVC : PJSocialFeedVC <UIScrollViewDelegate> {
+    CGFloat _thumbnailWidth;
+}
 
 @end

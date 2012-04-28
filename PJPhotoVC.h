@@ -33,11 +33,11 @@
 
 // this is the index into the full list of images
 @property NSInteger index;
-@property NSInteger indexOfFirstImageOnPage;
-@property NSInteger totalImages;
 
 @property (strong, nonatomic) IBOutlet UIScrollView *photoScrollView;
 @property (strong, nonatomic) IBOutlet UILabel *photoDescription;
+@property (strong, nonatomic) IBOutlet UIView *fillerRightSide;
+@property (strong, nonatomic) IBOutlet UIView *fillerLeftSide;
 @property BOOL showingInfo;
 
 - (IBAction)tapped:(id)sender;
@@ -49,5 +49,7 @@
 
 - (void) fadeOutUI;
 - (void) fadeInUI;
+
+- (void) didChangeImage:(NSInteger) index;
 
 @end
