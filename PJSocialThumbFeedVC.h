@@ -15,5 +15,6 @@
 @property NSInteger total;
 @property NSInteger page;
 @property NSInteger perPage;
+@property UIViewContentMode thumbnailContentMode;
 
 @end

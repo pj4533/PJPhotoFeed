@@ -13,6 +13,7 @@
 @synthesize total;
 @synthesize page;
 @synthesize perPage;
+@synthesize thumbnailContentMode;
 
 #pragma mark - View lifecycle
 
@@ -20,6 +21,8 @@
 
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.thumbnailContentMode = UIViewContentModeCenter;
+        
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
             _thumbnailWidth = 75.0;
         else {
@@ -99,7 +102,7 @@
         if (imageOffset < [_feedData count]) {
             CGRect frameRect = CGRectMake((_thumbnailWidth * i) + 4.0 + (4.0 * i), 2, _thumbnailWidth, _thumbnailWidth);
             UIImageView* imageView = [[UIImageView alloc] initWithFrame:frameRect];
-            imageView.contentMode = UIViewContentModeCenter;
+            imageView.contentMode = self.thumbnailContentMode;
             imageView.backgroundColor = [UIColor blackColor];
             imageView.image = [UIImage imageNamed:@"loading_placeholder"];
             [cell addSubview:imageView];            
@@ -120,7 +123,7 @@
             CGRect frameRect = CGRectMake((_thumbnailWidth * i) + 4.0 + (4.0 * i), 2, _thumbnailWidth, _thumbnailWidth);
             UIImageView* imageView = [[UIImageView alloc] initWithFrame:frameRect];
             imageView.backgroundColor = [UIColor blackColor];
-            imageView.contentMode = UIViewContentModeCenter;
+            imageView.contentMode = self.thumbnailContentMode;
             imageView.clipsToBounds = YES;
             imageView.tag = imageOffset;
             [self loadImageWithURL:[self getUrlForIndex:imageOffset] intoImageView:imageView cachedOnly:cachedOnly];
