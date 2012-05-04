@@ -14,6 +14,7 @@
 @synthesize page;
 @synthesize perPage;
 @synthesize thumbnailContentMode;
+@synthesize thumbnailWidth;
 
 #pragma mark - View lifecycle
 
@@ -24,12 +25,12 @@
         self.thumbnailContentMode = UIViewContentModeCenter;
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-            _thumbnailWidth = 75.0;
+            thumbnailWidth = 75.0;
         else {
             if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
-                _thumbnailWidth = 250;//185;
+                thumbnailWidth = 250;//185;
             else
-                _thumbnailWidth = 250;//165;
+                thumbnailWidth = 250;//165;
         }
         
     }
@@ -47,12 +48,6 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
-            _thumbnailWidth = 250;//185;
-        else
-            _thumbnailWidth = 250;//165;        
-    }
     return YES;
 }
 
@@ -67,7 +62,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if ([_feedData count]) {
-        int numberAcross = (int) floor(tableView.frame.size.width / _thumbnailWidth);
+        int numberAcross = (int) floor(tableView.frame.size.width / thumbnailWidth);
 
         NSInteger numRows = (NSInteger) (ceil( (double) [_feedData count]/ (double) numberAcross));
 
@@ -77,7 +72,7 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return _thumbnailWidth + 4;  // dynamic?
+    return thumbnailWidth + 4;  // dynamic?
 }
 
 
@@ -96,11 +91,11 @@
         [view removeFromSuperview];
     }
     
-    int numberAcross = (int) floor(cell.frame.size.width / _thumbnailWidth);
+    int numberAcross = (int) floor(cell.frame.size.width / thumbnailWidth);
     for (int i = 0; i < numberAcross; i++) {        
         NSInteger imageOffset = ([indexPath row] * numberAcross) + i;
         if (imageOffset < [_feedData count]) {
-            CGRect frameRect = CGRectMake((_thumbnailWidth * i) + 4.0 + (4.0 * i), 2, _thumbnailWidth, _thumbnailWidth);
+            CGRect frameRect = CGRectMake((thumbnailWidth * i) + 4.0 + (4.0 * i), 2, thumbnailWidth, thumbnailWidth);
             UIImageView* imageView = [[UIImageView alloc] initWithFrame:frameRect];
             imageView.contentMode = self.thumbnailContentMode;
             imageView.backgroundColor = [UIColor blackColor];
@@ -115,12 +110,12 @@
         [view removeFromSuperview];
     }
 
-    int numberAcross = (int) floor(cell.frame.size.width / _thumbnailWidth);
+    int numberAcross = (int) floor(cell.frame.size.width / thumbnailWidth);
     for (int i = 0; i < numberAcross; i++) {        
         NSInteger imageOffset = ([indexPath row] * numberAcross) + i;
         if (imageOffset < [_feedData count]) {
             // create UIImageView,  create UIButton   use tag for index?
-            CGRect frameRect = CGRectMake((_thumbnailWidth * i) + 4.0 + (4.0 * i), 2, _thumbnailWidth, _thumbnailWidth);
+            CGRect frameRect = CGRectMake((thumbnailWidth * i) + 4.0 + (4.0 * i), 2, thumbnailWidth, thumbnailWidth);
             UIImageView* imageView = [[UIImageView alloc] initWithFrame:frameRect];
             imageView.backgroundColor = [UIColor blackColor];
             imageView.contentMode = self.thumbnailContentMode;
