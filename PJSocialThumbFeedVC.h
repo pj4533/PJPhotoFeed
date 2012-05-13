@@ -17,5 +17,6 @@
 @property NSInteger perPage;
 @property UIViewContentMode thumbnailContentMode;
 @property CGFloat thumbnailWidth;
+@property CGFloat thumbnailHeight;
 
 @end

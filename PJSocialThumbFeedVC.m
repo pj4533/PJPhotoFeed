@@ -15,6 +15,7 @@
 @synthesize perPage;
 @synthesize thumbnailContentMode;
 @synthesize thumbnailWidth;
+@synthesize thumbnailHeight;
 
 #pragma mark - View lifecycle
 
@@ -32,7 +33,7 @@
             else
                 thumbnailWidth = 250;//165;
         }
-        
+        thumbnailHeight = thumbnailWidth;
     }
     
     return self;
@@ -72,7 +73,7 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return thumbnailWidth + 4;  // dynamic?
+    return thumbnailHeight + 4;  // dynamic?
 }
 
 
@@ -95,7 +96,7 @@
     for (int i = 0; i < numberAcross; i++) {        
         NSInteger imageOffset = ([indexPath row] * numberAcross) + i;
         if (imageOffset < [_feedData count]) {
-            CGRect frameRect = CGRectMake((thumbnailWidth * i) + 4.0 + (4.0 * i), 2, thumbnailWidth, thumbnailWidth);
+            CGRect frameRect = CGRectMake((thumbnailWidth * i) + 4.0 + (4.0 * i), 2, thumbnailWidth, thumbnailHeight);
             UIImageView* imageView = [[UIImageView alloc] initWithFrame:frameRect];
             imageView.contentMode = self.thumbnailContentMode;
             imageView.backgroundColor = [UIColor blackColor];
@@ -115,7 +116,7 @@
         NSInteger imageOffset = ([indexPath row] * numberAcross) + i;
         if (imageOffset < [_feedData count]) {
             // create UIImageView,  create UIButton   use tag for index?
-            CGRect frameRect = CGRectMake((thumbnailWidth * i) + 4.0 + (4.0 * i), 2, thumbnailWidth, thumbnailWidth);
+            CGRect frameRect = CGRectMake((thumbnailWidth * i) + 4.0 + (4.0 * i), 2, thumbnailWidth, thumbnailHeight);
             UIImageView* imageView = [[UIImageView alloc] initWithFrame:frameRect];
             imageView.backgroundColor = [UIColor blackColor];
             imageView.contentMode = self.thumbnailContentMode;
