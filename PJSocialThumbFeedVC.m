@@ -144,15 +144,6 @@
     [self didSelectImageWithIndex:button.tag];
 }
 
-- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
-    NSArray* visibleIndexPaths = [self.feedTableView indexPathsForVisibleRows];
-    for (NSIndexPath* indexPath in visibleIndexPaths) {
-        UITableViewCell* cell = [self.feedTableView cellForRowAtIndexPath:indexPath];
-        [self loadImagesForCell:cell atIndexPath:indexPath cachedOnly:NO];
-    }
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
