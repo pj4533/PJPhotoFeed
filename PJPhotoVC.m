@@ -75,10 +75,10 @@
 }
 
 - (void) loadImageWithIndex:(NSInteger) imageIndex intoArrayIndex:(NSInteger) arrayIndex {
-    
+
     CGFloat width = photoScrollView.frame.size.width;
     CGFloat height = photoScrollView.frame.size.height;
-
+    
     PJPhotoScrollView* onePhotoScrollView = [[PJPhotoScrollView alloc] initWithFrame:CGRectMake(width * arrayIndex, 0.0f, width, height)];
     onePhotoScrollView.tag = 1;
     onePhotoScrollView.minimumZoomScale = 1.0f;
@@ -95,14 +95,12 @@
 }
 
 - (void) updateViewToOrientation:(UIInterfaceOrientation) interfaceOrientation withDuration:(NSTimeInterval) duration {
-    CGFloat longSide;
-    CGFloat shortSide;
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        longSide = 480.0f;
-        shortSide = 320.0f;
-    } else {
-        longSide = 1024.0f;
-        shortSide = 768.0f;
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    CGFloat longSide = screenBounds.size.height;
+    CGFloat shortSide = screenBounds.size.width;
+    if (screenBounds.size.height < screenBounds.size.width) {
+        shortSide = screenBounds.size.height;
+        longSide = screenBounds.size.width;
     }
     
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
@@ -180,30 +178,9 @@
     
     imagesLoaded = [[NSMutableArray alloc] initWithCapacity:3];
     
-    CGFloat width = photoScrollView.frame.size.width;
-    if ((index-1) >= 0) {
-        [self loadImageWithIndex:index-1 intoArrayIndex:0];
-        [self loadImageWithIndex:index intoArrayIndex:1];
-        _currentArrayIndexShowing = 1;
-    } else {
-        [self loadImageWithIndex:index intoArrayIndex:0];
-        _currentArrayIndexShowing = 0;
-    }
+}
 
-    if ((index+1) < [self.feedData count]) {
-        [self loadImageWithIndex:index+1 intoArrayIndex:[imagesLoaded count]];
-    }
-
-    [self setCaptionForIndex:index];
-    
-    
-    photoScrollView.contentSize = CGSizeMake(width * [imagesLoaded count], photoScrollView.frame.size.height);
-    photoScrollView.contentOffset = CGPointMake(width * _currentArrayIndexShowing, 0.0f);
-    
-    
-    // this is a hack, but works to make sure it updates from the nib properly
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
-        [self updateViewToOrientation:self.interfaceOrientation withDuration:0.1f];
+- (void) viewDidAppear:(BOOL)animated {
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -216,7 +193,32 @@
     
     if (_internalOrientation != self.interfaceOrientation) {
         [self updateViewToOrientation:self.interfaceOrientation withDuration:0.1f];
-    }    
+    }
+    
+    CGFloat width = photoScrollView.frame.size.width;
+    if ((index-1) >= 0) {
+        [self loadImageWithIndex:index-1 intoArrayIndex:0];
+        [self loadImageWithIndex:index intoArrayIndex:1];
+        _currentArrayIndexShowing = 1;
+    } else {
+        [self loadImageWithIndex:index intoArrayIndex:0];
+        _currentArrayIndexShowing = 0;
+    }
+    
+    if ((index+1) < [self.feedData count]) {
+        [self loadImageWithIndex:index+1 intoArrayIndex:[imagesLoaded count]];
+    }
+    
+    [self setCaptionForIndex:index];
+    
+    
+    photoScrollView.contentSize = CGSizeMake(width * [imagesLoaded count], photoScrollView.frame.size.height);
+    photoScrollView.contentOffset = CGPointMake(width * _currentArrayIndexShowing, 0.0f);
+    
+    
+    // this is a hack, but works to make sure it updates from the nib properly
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        [self updateViewToOrientation:self.interfaceOrientation withDuration:0.1f];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {    
@@ -304,7 +306,6 @@
     
     CGFloat width = scrollView.frame.size.width;
     CGFloat height = scrollView.frame.size.height;
-    
     
     // possibly i don't need this....can't I just use the imagesLoaded array to get this scroll view not use
     // a for loop
