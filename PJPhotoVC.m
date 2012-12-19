@@ -95,12 +95,12 @@
 }
 
 - (void) updateViewToOrientation:(UIInterfaceOrientation) interfaceOrientation withDuration:(NSTimeInterval) duration {
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    CGFloat longSide = screenBounds.size.height;
-    CGFloat shortSide = screenBounds.size.width;
-    if (screenBounds.size.height < screenBounds.size.width) {
-        shortSide = screenBounds.size.height;
-        longSide = screenBounds.size.width;
+    CGRect scrollViewBounds = self.photoScrollView.bounds;
+    CGFloat longSide = scrollViewBounds.size.height;
+    CGFloat shortSide = scrollViewBounds.size.width;
+    if (scrollViewBounds.size.height < scrollViewBounds.size.width) {
+        shortSide = scrollViewBounds.size.height;
+        longSide = scrollViewBounds.size.width;
     }
     
     if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
