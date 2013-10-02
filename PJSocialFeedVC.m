@@ -121,7 +121,7 @@
     NSUInteger row = [indexPath row];
     NSDictionary* feedItem = [_feedData objectAtIndex:row];
     
-    cellSize = [[feedItem objectForKey:@"Description"] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:13.0f] constrainedToSize:CGSizeMake(250.0f, 132.0f) lineBreakMode:UILineBreakModeWordWrap];
+    cellSize = [[feedItem objectForKey:@"Description"] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:13.0f] constrainedToSize:CGSizeMake(250.0f, 132.0f) lineBreakMode:NSLineBreakByWordWrapping];
     
     // hard coding 26 here to account for top and bottom of cell.  If we ever change this font, this will need to change also.
     CGFloat height = (cellSize.height + 45);
