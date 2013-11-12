@@ -107,9 +107,9 @@
 }
 
 - (void) loadImagesForCell:(UITableViewCell*) cell atIndexPath:(NSIndexPath*) indexPath cachedOnly:(BOOL)cachedOnly {
-    for (UIView* view in cell.subviews) {
-        [view removeFromSuperview];
-    }
+//    for (UIView* view in cell.subviews) {
+//        [view removeFromSuperview];
+//    }
 
     int numberAcross = (int) floor(cell.frame.size.width / thumbnailWidth);
     for (int i = 0; i < numberAcross; i++) {        
@@ -159,11 +159,11 @@
     cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, tableView.frame.size.width, 79.0);
     
     if (![self.feedTableView isDecelerating]) {
-        [self loadImagesForCell:cell atIndexPath:indexPath cachedOnly:NO];        
+        [self loadImagesForCell:cell atIndexPath:indexPath cachedOnly:NO];
     } else {
         [self loadImagesForCell:cell atIndexPath:indexPath cachedOnly:YES];        
     }
-    
+
     return cell;
 }
 
